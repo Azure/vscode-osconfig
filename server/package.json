@@ -1,0 +1,28 @@
+{
+  "name": "lsp-osconfig-server",
+  "description": "OSConfig extension language server",
+  "version": "1.0.0",
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "engines": {
+    "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Azure/vscode-osconfig"
+  },
+  "dependencies": {
+    "@octokit/request": "^6.2.3",
+    "@octokit/types": "^9.0.0",
+    "fp-ts": "^2.13.1",
+    "io-ts": "^2.2.20",
+    "jsonc-parser": "^3.2.0",
+    "octokit": "^2.0.14",
+    "vscode-languageserver": "^8.0.2",
+    "vscode-languageserver-textdocument": "^1.0.8"
+  },
+  "devDependencies": {
+    "io-ts-types": "^0.5.19"
+  },
+  "scripts": {}
+}
