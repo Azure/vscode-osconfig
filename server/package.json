@@ -17,6 +17,7 @@
     "fp-ts": "^2.13.1",
     "io-ts": "^2.2.20",
     "jsonc-parser": "^3.2.0",
+    "lodash": "^4.17.21",
     "octokit": "^2.0.14",
     "vscode-languageserver": "^8.0.2",
     "vscode-languageserver-textdocument": "^1.0.8"
