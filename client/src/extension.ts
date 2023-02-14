@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -26,7 +27,11 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const clientOptions: LanguageClientOptions = {
-    documentSelector: [{ scheme: 'file', language: 'json' }],
+    documentSelector: [{
+      scheme: 'file',
+      language: 'json',
+      pattern: '**/osconfig_desired.json'
+    }],
     synchronize: {
       fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc'),
     },
