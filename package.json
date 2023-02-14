@@ -11,10 +11,10 @@
   ],
   "categories": [],
   "activationEvents": [
-    "workspaceContains:**/osconfig.desired.json",
+    "workspaceContains:**/osconfig_desired.json",
     "onLanguage:json"
   ],
-  "main": "./out/client/extension.js",
+  "main": "./client/out/extension.js",
   "contributes": {
     "configuration": {
       "type": "object",
@@ -42,13 +42,13 @@
           "scope": "window",
           "type": "string",
           "markdownDescription": "The path to a directory containing a set of models.",
-          "default": "${workspaceFolder}/models"
+          "default": ""
         },
         "osconfig.model.priority": {
           "scope": "window",
           "type": "string",
           "default": "remote",
-          "markdownDescription": "The model repository to use when resolving model references. If the selected source is not available, the next source is used as a fallback.",
+          "markdownDescription": "The model repository to load load models from. If the selected source is not available, the next source is used as a 'fallback'.",
           "enum": [
             "remote",
             "local"
@@ -74,7 +74,7 @@
     "watch": "tsc -b -watch",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint ./client/src ./server/src --ext .ts",
-    "test": "node ./out/test/runTest.js",
+    "test": "sh ./scripts/e2e.sh",
     "postinstall": "sh ./scripts/postinstall.sh"
   },
   "devDependencies": {
