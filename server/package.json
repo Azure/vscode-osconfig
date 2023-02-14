@@ -1,5 +1,5 @@
 {
-  "name": "lsp-osconfig-server",
+  "name": "osconfig-language-server",
   "description": "OSConfig extension language server",
   "version": "1.0.0",
   "author": "Microsoft Corporation",
@@ -23,6 +23,7 @@
     "vscode-languageserver-textdocument": "^1.0.8"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "io-ts-types": "^0.5.19"
   },
   "scripts": {}
