@@ -94,7 +94,6 @@ async function validateDocument(document: TextDocument): Promise<void> {
     repository = await createRepository(settings);
   }
 
-
   if (repository) {
     const schema = repository.schema() as Schema;
     const validator = new Validator(document);
@@ -170,6 +169,8 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Comp
 
   return completions;
 });
+
+connection.onCompletionResolve((item: CompletionItem): CompletionItem => item);
 
 documents.listen(connection);
 connection.listen();
