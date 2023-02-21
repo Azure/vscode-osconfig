@@ -1,0 +1,18 @@
+name: Feature request
+description: Suggest a new feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening a feature request, please search for the behaviour in the existing issues.
+
+        ---
+
+        Please be sure to include as much detail and examples as possible when describing your proposed feature.
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature description
+      description: Describe the feature...
+    validations:
+      required: true
