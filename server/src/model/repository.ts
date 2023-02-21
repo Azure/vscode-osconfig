@@ -119,7 +119,7 @@ export class GitHubRepository extends Repository {
 
     if (res.status === 200) {
       const jsonFiles = (res.data as ContentTree[]).filter(
-        (file) => file.type === 'file' && file.name.endsWith('.json')
+        (file) => file.type === 'file' && file.name.toLowerCase().endsWith('.json')
       );
 
       for (const file of jsonFiles) {
@@ -129,6 +129,8 @@ export class GitHubRepository extends Repository {
 
         this.parse(res.data as string, file);
       }
+    } else {
+      console.log(`Failed to load models from remote GitHub repository (${this.owner}/${this.repo}/${this.path}@${this.ref}): ${res.status} ${res.data}`);
     }
 
     return this.schema();
@@ -148,7 +150,7 @@ export class LocalRepository extends Repository {
       .map((fileName) => path.join(this.path, fileName))
       .filter(
         (filePath) =>
-          fs.lstatSync(filePath).isFile() && filePath.endsWith('.json')
+          fs.lstatSync(filePath).isFile() && filePath.toLowerCase().endsWith('.json')
       );
 
     for (const file of files) {
