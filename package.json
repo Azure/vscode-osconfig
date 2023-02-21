@@ -11,7 +11,7 @@
   ],
   "categories": [],
   "activationEvents": [
-    "workspaceContains:**/osconfig_desired.json",
+    "workspaceContains:**/*.desired.json",
     "onLanguage:json"
   ],
   "main": "./client/out/extension.js",

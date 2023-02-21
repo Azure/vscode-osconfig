@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
     documentSelector: [{
       scheme: 'file',
       language: 'json',
-      pattern: '**/osconfig_desired.json'
+      pattern: '**/*.desired.json'
     }],
     synchronize: {
       fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc'),

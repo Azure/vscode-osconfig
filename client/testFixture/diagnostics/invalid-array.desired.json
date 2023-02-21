@@ -1,0 +1,15 @@
+{
+    "component1": {
+        "object4": [
+            1
+        ],
+        "object5": [
+            "1"
+        ],
+        "object6": [
+            {
+                "invalid": "invalid"
+            }
+        ]
+    }
+}
