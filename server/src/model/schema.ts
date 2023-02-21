@@ -141,7 +141,7 @@ export function getDocumentation(schema: Schema, location: Location): string {
   return documentation;
 }
 
-function createCompletion(label: string, documentation?: string, detail?: string): CompletionItem {
+function createCompletion(label: string, kind: CompletionItemKind, documentation?: string, detail?: string): CompletionItem {
   const completion = CompletionItem.create(label);
 
   completion.label = label;
@@ -154,7 +154,7 @@ function createCompletion(label: string, documentation?: string, detail?: string
     };
   }
 
-  completion.kind = CompletionItemKind.Value;
+  completion.kind = kind;
 
   return completion;
 }
@@ -185,32 +185,40 @@ function createTabStop(tab: number, choices?: string[]): string {
   return (choices && choices.length > 0) ? `\${${tab}|${choices.join(',')}|}` : `$${tab}`;
 }
 
-// FIXME: cannot pass by reference so tab is lost (duplicated) for recursive calls
-function createSnippetText(schema: Schema, tab = 1, depth = 0): string {
+interface SnippetContext {
+  tab: number;
+}
+
+function createSnippetText(schema: Schema, context: SnippetContext = { tab: 1 }, depth = 0): string {
   let snippet = '';
   const indent = `${'\t'.repeat(depth)}`;
 
   if (isString(schema)) {
-    snippet += `"${createTabStop(tab)}"`;
+    snippet += `"${createTabStop(context.tab)}"`;
   } else if (isNumber(schema)) {
-    snippet += `${createTabStop(tab)}`;
+    snippet += `${createTabStop(context.tab)}`;
   } else if (isBoolean(schema)) {
-    snippet += `${createTabStop(tab, ['true', 'false'])}`;
+    snippet += `${createTabStop(context.tab, ['true', 'false'])}`;
   } else if (isArray(schema)) {
+    context.tab++;
     snippet += '[\n';
-    snippet += `${indent}\t${createSnippetText(schema.elementSchema, tab + 1, depth + 1)}\n`;
+    snippet += `${indent}\t${createSnippetText(schema.elementSchema, context, depth + 1)}\n`;
     snippet += `${indent}]`;
   } else if (isObject(schema)) {
-    const fields = schema.fields.map((field) => `${indent}\t"${field.name}": ${createSnippetText(field.schema, tab++, depth + 1)}`);
+    const fields = schema.fields.map((field) => {
+      context.tab++;
+      return `${indent}\t"${field.name}": ${createSnippetText(field.schema, context, depth + 1)}`;
+    });
     snippet += '{\n';
     snippet += `${fields.join(',\n')}\n`;
     snippet += `${indent}}`;
   } else if (isEnum(schema)) {
     const choices = schema.enumValues.map((value) => (schema.valueSchema === 'string') ? `"${value.enumValue}"` : `${value.enumValue}`);
-    snippet += createTabStop(tab, choices);
+    snippet += createTabStop(context.tab, choices);
   } else if (isMap(schema)) {
+    context.tab += 2;
     snippet += '{\n';
-    snippet += `${indent}\t"${createTabStop(tab)}": ${createSnippetText(schema.mapValue.schema, tab + 1, depth + 1)}\n`;
+    snippet += `${indent}\t"${createTabStop(context.tab - 1)}": ${createSnippetText(schema.mapValue.schema, context, depth + 1)}\n`;
     snippet += `${indent}}`;
   }
 
@@ -226,7 +234,7 @@ export function getCompletions(schema: Schema, location: Location, position: Pos
       const documentation = getDocumentation(field.schema, location);
 
       if (location.previousNode) {
-        completion = createCompletion(field.name, documentation);
+        completion = createCompletion(field.name, CompletionItemKind.Property, documentation);
       } else {
         const snippet = `"${field.name}": ${createSnippetText(field.schema)}`;
         completion = createSnippetCompletion(field.name, snippet, position, documentation);
@@ -234,6 +242,16 @@ export function getCompletions(schema: Schema, location: Location, position: Pos
 
       completionItems.push(completion);
     });
+  } else if (!location.isAtPropertyKey && isObject(schema)) {
+    const property = location.path[location.path.length - 1];
+    const propertySchema = schema.fields.find((field) => field.name === property)?.schema;
+
+    if (isEnum(propertySchema)) {
+      propertySchema.enumValues.forEach((value) => {
+        const completion = createCompletion(value.enumValue.toString(), CompletionItemKind.Value);
+        completionItems.push(completion);
+      });
+    }
   }
 
   return completionItems;
