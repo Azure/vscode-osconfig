@@ -4,7 +4,12 @@ This extension provides a rich authoring experience for [Azure Device OS Configu
 
 ## Features
 
-<!-- TODO: screenshots/feature descriptions -->
+- Completion lists and snippets (components, objects, properties, values, etc.)
+- Hover information (component, object, enum values, etc.)
+- Desired configuration document validation
+- Customizable model repository *(see [Extension Settings](#extension-settings))*
+
+![Completions](images/demo.gif)
 
 ## Extension Settings
 
@@ -17,9 +22,7 @@ This extension contributes the following settings:
 - `osconfig.model.local.path`: The path to a directory containing a set of models.
 - `osconfig.model.priority`: The model repository to use when resolving model references. If the selected source is not available, the next source is used as a fallback.
 
-<!-- ## Release Notes -->
-
-<!-- TODO: Add release notes here on first release -->
+> By default, the extension will load the latest models from the `main` branch of the [Azure/azure-osconfig](https://github.com/Azure/azure-osconfig) repository (located under `/src/modules/mim`).
 
 ---
 
@@ -29,7 +32,7 @@ Have questions or feedback? There are many ways in which you can participate in 
 
 - [Submit bugs and/or feature requests](https://github.com/Azure/vscode-osconfig/issues)
 - Review [source code changes](https://github.com/Azure/vscode-osconfig/pulls)
-- [Contribute directly](https://github.com/Azure/vscode-osconfig/blob/main/CONTRIBUTING.md) to the source code
+- [Contribute directly](CONTRIBUTING.md) to the source code
 
 If you are interested in fixing issues and/or contributing, please see our [Contribution Guidelines](https://github.com/Azure/vscode-osconfig/blob/main/CONTRIBUTING.md).
 
