@@ -83,7 +83,7 @@ Please include the following with each issue:
 - A code snippet that demonstrates the issue, or a link to a code repository we can easily pull down onto our machine to recreate the issue.
 - Simplify your code/example around the issue so we can better isolate the problem.
 
-> Note: Because we need to copy and paste the code snippet, including a code snippet as a media file (e.g. .gif) is not sufficient.
+> Note: Because we may need to copy and paste the code snippet, including a code snippet as a media file (e.g. .gif) is not sufficient.
 
 Don't feel bad if we can't reproduce the issue and ask for more information!
 
@@ -98,7 +98,7 @@ Pull requests are welcome. Before submitting a pull request, please ensure that:
 
 ## Suggestions
 
-We're also interested in your feedback and suggestions. You can submit a [suggestion](TODO:) or [feature request](TODO:) through the issue tracker. To make this process more effective, please include as much information and detail as possible.
+We're also interested in your feedback and suggestions. You can submit a bug or feature request through the [issue tracker](https://github.com/microsoft/vscode/issues/new/choose). To make this process more effective, please include as much information and detail as possible.
 
 ## Discussion Etiquette
 
