@@ -18,7 +18,6 @@ async function main() {
     const extensionTestsPath = path.resolve(__dirname, './index');
 
     const workspaceFolder = path.resolve(__dirname, '../../test-fixture');
-
     const launchArgs = [
       workspaceFolder,
     ];
