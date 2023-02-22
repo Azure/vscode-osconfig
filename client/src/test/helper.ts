@@ -34,7 +34,7 @@ async function sleep(ms: number) {
 }
 
 export const getPath = (p: string) => {
-  return path.resolve(__dirname, '../../testFixture', p);
+  return path.resolve(__dirname, '../../test-fixture', p);
 };
 
 export const getUri = (p: string) => {

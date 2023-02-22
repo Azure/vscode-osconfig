@@ -33,7 +33,7 @@
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--extensionTestsPath=${workspaceFolder}/client/out/test/index",
-				"${workspaceRoot}/client/testFixture"
+				"${workspaceRoot}/client/test-fixture"
 			],
 			"outFiles": [
 				"${workspaceFolder}/client/out/test/**/*.js"
