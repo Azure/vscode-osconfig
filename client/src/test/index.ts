@@ -10,7 +10,11 @@ import * as path from 'path';
 export function run(): Promise<void> {
   const mocha = new Mocha({
     ui: 'tdd',
-    color: true
+    color: true,
+    reporter: 'mocha-junit-reporter',
+    reporterOptions: {
+      mochaFile: 'test-results.xml',
+    }
   });
   mocha.timeout(100000);
 
