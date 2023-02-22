@@ -15,6 +15,10 @@
     "workspaceContains:**/*.desired.json",
     "onLanguage:json"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Azure/vscode-osconfig"
+  },
   "main": "./client/out/extension.js",
   "contributes": {
     "configuration": {
