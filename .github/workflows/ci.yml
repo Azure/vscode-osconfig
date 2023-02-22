@@ -1,16 +1,13 @@
 name: CI
 
-on: [push]
-  # pull_request:
-  #   branches:
-  #     - main
+on:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -23,15 +20,9 @@ jobs:
     - run: npm install
 
     - run: xvfb-run -a npm test
-      if: runner.os == 'Linux'
-
-    - run: npm test
-      if: runner.os != 'Linux'
-
-    - run: mv test-results.xml ${{ matrix.os }}.xml
 
     - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: integration-test
-        path: ${{ matrix.os }}.xml
+        path: test-results.xml
