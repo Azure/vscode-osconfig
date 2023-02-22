@@ -14,11 +14,17 @@ async function main() {
     const extensionDevelopmentPath = path.resolve(__dirname, '../../../');
 
     // The path to test runner
-    // Passed to --extensionTestsPath
+    // Passed to `--extensionTestsPath`
     const extensionTestsPath = path.resolve(__dirname, './index');
 
+    const workspaceFolder = path.resolve(__dirname, '../../test-fixture');
+
+    const launchArgs = [
+      workspaceFolder,
+    ];
+
     // Download VS Code, unzip it and run the integration test
-    await runTests({ extensionDevelopmentPath, extensionTestsPath });
+    await runTests({ extensionDevelopmentPath, extensionTestsPath, launchArgs });
   } catch (err) {
     console.error('Failed to run tests');
     process.exit(1);
