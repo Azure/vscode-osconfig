@@ -94,7 +94,7 @@ suite('Should show diagnostics', () => {
       },
       {
         severity: vscode.DiagnosticSeverity.Error,
-        message: 'Must be one of: \'enum1\' | \'enum2\'',
+        message: 'Must be one of: \'enum-1\' | \'enum-2\'',
         range: toRange(2, 20, 2, 27),
       },
       {
@@ -142,9 +142,6 @@ async function testDiagnostics(docUri: vscode.Uri, expectedDiagnostics: vscode.D
   await open(docUri);
 
   const actualDiagnostics = vscode.languages.getDiagnostics(docUri);
-
-  console.log(`actualDiagnostics: ${JSON.stringify(actualDiagnostics)}`);
-
   assert.equal(actualDiagnostics.length, expectedDiagnostics.length);
 
   expectedDiagnostics.forEach((expectedDiagnostic, i) => {
