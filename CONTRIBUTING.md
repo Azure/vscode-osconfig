@@ -7,7 +7,7 @@ There are many ways in which you can participate in this project: submitting pul
 In order to download necessary tools, clone the repository, and install dependencies, you must install the following tools:
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/)
+- [Node.js](https://nodejs.org/) `>16.x`
 - [Visual Studio Code](https://code.visualstudio.com/)
 
 ### Development Container
