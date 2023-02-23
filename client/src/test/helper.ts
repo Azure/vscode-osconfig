@@ -12,8 +12,8 @@ export let documentEol: string;
 export let platformEol: string;
 
 export async function activate() {
-  // The extensionId is `publisher.name` from package.json
-  const ext = vscode.extensions.getExtension('microsoft.azure-osconfig');
+  // The extensionId is `<publisher>.<name>` from package.json
+  const ext = vscode.extensions.getExtension('edge-security.osconfig-dc');
   await ext.activate();
 
   // Wait for server activation
