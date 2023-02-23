@@ -1,6 +1,5 @@
 {
-  "name": "osconfig-language-server",
-  "description": "OSConfig extension language server",
+  "name": "dc-language-server",
   "version": "1.0.0",
   "author": "Microsoft Corporation",
   "license": "MIT",

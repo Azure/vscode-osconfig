@@ -1,4 +1,4 @@
-# vscode-osconfig
+# Azure Edge Security
 
 This extension provides a rich authoring experience for [Azure Device OS Configuration](https://github.com/Azure/azure-osconfig) Desired Configuration (DC) documents.
 

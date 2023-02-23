@@ -1,9 +1,9 @@
 {
-  "name": "azure-osconfig",
-  "displayName": "Azure OSConfig",
+  "name": "desired-configuration",
+  "displayName": "Azure Edge Security DC",
   "description": "",
-  "version": "0.0.1",
-  "publisher": "microsoft",
+  "version": "1.0.0",
+  "publisher": "edge-security",
   "engines": {
     "vscode": "^1.74.0"
   },
