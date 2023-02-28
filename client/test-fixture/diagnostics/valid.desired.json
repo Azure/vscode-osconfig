@@ -1,0 +1,33 @@
+{
+    "component1": {
+        "object1": "string",
+        "object2": 123,
+        "object3": true,
+        "object4": [
+            "string1",
+            "string2",
+            "string3"
+        ],
+        "object5": [
+            1,
+            2,
+            3
+        ],
+        "object6": [
+            {
+                "object6.1": "string",
+                "object6.2": 123,
+                "object6.3": true
+            }
+        ],
+        "object7": "enum-1",
+        "object8": 2
+    },
+    "component2": {
+        "object1": {
+            "object1.1": "string",
+            "object1.2": 123,
+            "object1.3": true
+        }
+    }
+}

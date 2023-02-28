@@ -1,0 +1,14 @@
+{
+    "component1": {
+        "object6": [
+            {
+                "invalid": "string"
+            }
+        ]
+    },
+    "component2": {
+        "object1": {
+            "invalid": "string"
+        }
+    }
+}

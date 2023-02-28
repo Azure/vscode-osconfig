@@ -1,45 +1,98 @@
 {
   "name": "osconfig",
-  "displayName": "AzureOSConfig",
+  "displayName": "Azure Edge Security DC",
   "description": "",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "publisher": "edge-security",
   "engines": {
     "vscode": "^1.74.0"
   },
-  "categories": [
-    "Other"
+  "keywords": [
+    "multi-root ready"
   ],
+  "categories": [],
   "activationEvents": [
-    "onCommand:osconfig.helloWorld"
+    "workspaceContains:**/osconfig_desired*.json",
+    "onLanguage:json"
   ],
-  "main": "./out/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Azure/vscode-osconfig"
+  },
+  "main": "./client/out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "osconfig.helloWorld",
-        "title": "Hello World"
+    "configuration": {
+      "type": "object",
+      "title": "Azure Edge Security DC",
+      "properties": {
+        "osconfig.model.remote.repository": {
+          "scope": "window",
+          "type": "string",
+          "markdownDescription": "The name of the GitHub model repository `<owner>/<repo>`. The name is not case sensative.",
+          "default": "Azure/azure-osconfig"
+        },
+        "osconfig.model.remote.ref": {
+          "scope": "window",
+          "type": "string",
+          "markdownDescription": "The name of the commit/branch/tag. Default: the repository's default branch (usually `main`)",
+          "default": "main"
+        },
+        "osconfig.model.remote.path": {
+          "scope": "window",
+          "type": "string",
+          "markdownDescription": "The path to the directory containing the model files.",
+          "default": "src/modules/mim"
+        },
+        "osconfig.model.local.path": {
+          "scope": "window",
+          "type": "string",
+          "markdownDescription": "The path to a directory containing a set of models.",
+          "default": ""
+        },
+        "osconfig.model.priority": {
+          "scope": "window",
+          "type": "string",
+          "default": "remote",
+          "markdownDescription": "The model repository to load load models from. If the selected source is not available, the next source is used as a 'fallback'.",
+          "enum": [
+            "remote",
+            "local"
+          ]
+        },
+        "osconfig.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
       }
-    ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "tsc -b",
+    "watch": "tsc -b -watch",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "lint": "eslint ./client/src ./server/src --ext .ts",
+    "test": "sh ./scripts/e2e.sh",
+    "postinstall": "sh ./scripts/postinstall.sh"
   },
   "devDependencies": {
-    "@types/vscode": "^1.74.0",
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
-    "@typescript-eslint/eslint-plugin": "^5.45.0",
-    "@typescript-eslint/parser": "^5.45.0",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
     "mocha": "^10.1.0",
-    "typescript": "^4.9.3",
-    "@vscode/test-electron": "^2.2.0"
+    "mocha-junit-reporter": "^2.2.0",
+    "typescript": "^4.9.3"
   }
 }
