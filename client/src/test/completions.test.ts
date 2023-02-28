@@ -9,7 +9,7 @@ import { getUri, open } from './helper';
 
 suite('Should do completion', () => {
   test('Completes the component names', async () => {
-    const docUri = getUri('completions/component.desired.json');
+    const docUri = getUri('completions/osconfig_desired_component.json');
     await testCompletion(docUri, new vscode.Position(1, 5), {
       items: [
         { label: 'component1', kind: vscode.CompletionItemKind.Property },
@@ -19,7 +19,7 @@ suite('Should do completion', () => {
   });
 
   test('Completes the object names for a component', async () => {
-    const docUri = getUri('completions/object.desired.json');
+    const docUri = getUri('completions/osconfig_desired_object.json');
     await testCompletion(docUri, new vscode.Position(2, 9), {
       items: [
         { label: 'object1', kind: vscode.CompletionItemKind.Property },
@@ -35,7 +35,7 @@ suite('Should do completion', () => {
   });
 
   test('Completes the object properties component.object', async () => {
-    const docUri = getUri('completions/property.desired.json');
+    const docUri = getUri('completions/osconfig_desired_property.json');
     await testCompletion(docUri, new vscode.Position(3, 13), {
       items: [
         { label: 'object1.1', kind: vscode.CompletionItemKind.Property },
@@ -46,7 +46,7 @@ suite('Should do completion', () => {
   });
 
   test('Completes string enum values', async () => {
-    const docUri = getUri('completions/enum.desired.json');
+    const docUri = getUri('completions/osconfig_desired_enum.json');
     await testCompletion(docUri, new vscode.Position(2, 20), {
       items: [
         { label: 'enum-1', kind: vscode.CompletionItemKind.Value },
@@ -56,7 +56,7 @@ suite('Should do completion', () => {
   });
 
   test('Completes integer enum values', async () => {
-    const docUri = getUri('completions/enum.desired.json');
+    const docUri = getUri('completions/osconfig_desired_enum.json');
     await testCompletion(docUri, new vscode.Position(3, 19), {
       items: [
         { label: '1', kind: vscode.CompletionItemKind.Value },

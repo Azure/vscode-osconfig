@@ -1,5 +1,5 @@
 {
-  "name": "osconfig-dc",
+  "name": "osconfig",
   "displayName": "Azure Edge Security DC",
   "description": "",
   "version": "1.0.0",
@@ -12,7 +12,7 @@
   ],
   "categories": [],
   "activationEvents": [
-    "workspaceContains:**/*.desired.json",
+    "workspaceContains:**/osconfig_desired*.json",
     "onLanguage:json"
   ],
   "repository": {
@@ -23,7 +23,7 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "azure-osconfig",
+      "title": "Azure Edge Security DC",
       "properties": {
         "osconfig.model.remote.repository": {
           "scope": "window",

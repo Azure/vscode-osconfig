@@ -14,7 +14,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid component name', async () => {
-    const docUri = getUri('diagnostics/invalid-component.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-component.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
@@ -25,7 +25,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid object name', async () => {
-    const docUri = getUri('diagnostics/invalid-object.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-object.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
@@ -36,7 +36,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid object property', async () => {
-    const docUri = getUri('diagnostics/invalid-property.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-property.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
@@ -52,7 +52,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid string value', async () => {
-    const docUri = getUri('diagnostics/invalid-string.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-string.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
@@ -63,7 +63,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid integer value', async () => {
-    const docUri = getUri('diagnostics/invalid-integer.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-integer.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
@@ -74,7 +74,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid boolean value', async () => {
-    const docUri = getUri('diagnostics/invalid-boolean.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-boolean.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
@@ -85,7 +85,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid enum value', async () => {
-    const docUri = getUri('diagnostics/invalid-enum.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-enum.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
@@ -111,7 +111,7 @@ suite('Should show diagnostics', () => {
   });
 
   test('Invalid array', async () => {
-    const docUri = getUri('diagnostics/invalid-array.desired.json');
+    const docUri = getUri('diagnostics/osconfig_desired_invalid-array.json');
     await testDiagnostics(docUri, [
       {
         severity: vscode.DiagnosticSeverity.Error,
