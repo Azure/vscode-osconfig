@@ -80,7 +80,9 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint ./client/src ./server/src --ext .ts",
     "test": "sh ./scripts/e2e.sh",
-    "postinstall": "sh ./scripts/postinstall.sh"
+    "postinstall": "sh ./scripts/postinstall.sh",
+    "package": "vsce package",
+    "deploy": "vsce publish --yarn"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
@@ -89,6 +91,7 @@
     "@types/vscode": "^1.74.0",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
+    "@vscode/vsce": "^2.18.0",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
     "mocha": "^10.1.0",
