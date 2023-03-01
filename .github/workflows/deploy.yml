@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+    - v*.*.*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - run: npm install
+
+    - name: Create vsix file
+      run: npm run package
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: vsix
+        path: *.vsix
+
+    - name: Publish
+      run: npm run deploy
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+    - name: Create Release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git release create ${{ github.ref_name }} \
+          --repo ${{ github.repository }} \
+          --title "Release ${{ github.ref_name }}" \
+          --target ${{ github.sha }} \
+          --generate-notes \
+          --latest \
+          *.vsix
