@@ -12,7 +12,7 @@ In order to download necessary tools, clone the repository, and install dependen
 
 ### Development Container
 
-Alternatively, you can avoid local dependency installation as this repository includes a Visual Studio Code Remote - Containers / Codespaces [development container](https://github.com/Azure/vscode-osconfig/tree/main/.devcontainer).
+Alternatively, you can avoid local dependency installation as this repository includes a Visual Studio Code Remote - Containers / Codespaces [development container](https://github.com/Azure/vscode-edge-security/tree/main/.devcontainer).
 
 - For [Remote - Containers](https://aka.ms/vscode-remote/download/containers), use the **Remote-Containers: Open Repository in Container...** command which creates a Docker volume for better disk I/O on macOS and Windows.
 - For Codespaces, install the [GitHub Codespaces](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces) extension in VS Code, and use the **Codespaces: Create New Codespace command**.
@@ -24,7 +24,7 @@ If you want to understand how this extension works or want to debug an issue, yo
 First, fork the repository so that you can make a pull request later and clone your fork:
 
 ```bash
-git clone https://github.com/<your-github-username>/vscode-osconfig
+git clone https://github.com/<your-github-username>/vscode-edge-security
 ```
 
 Occasionally you will want to merge changes in the upstream repository (the official code repo) with your fork. You can do this by adding the upstream repository as a remote and pulling from it:
@@ -38,10 +38,10 @@ Manage any merge conflicts, commit them, and then push them to your fork.
 
 ### Build
 
-Open the `vscode-osconfig` folder in VSCode:
+Open the `vscode-edge-security` folder in VSCode:
 
 ```bash
-code vscode-osconfig
+code vscode-edge-security
 ```
 
 Install and build all of the dependencies using `npm`:
@@ -91,7 +91,7 @@ Don't feel bad if we can't reproduce the issue and ask for more information!
 
 Pull requests are welcome. Before submitting a pull request, please ensure that:
 
-- You have signed the [Contributor License Agreement](https://cla.opensource.microsoft.com/microsoft/vscode-osconfig).
+- You have signed the [Contributor License Agreement](https://cla.opensource.microsoft.com/microsoft/vscode-edge-security).
 - Your code adheres to the existing style in the codebase (indentation, accurate comments, etc.).
 - You have added unit tests for the new code.
 - You have run all the unit tests using `npm test`.

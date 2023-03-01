@@ -1,23 +1,31 @@
 {
   "name": "osconfig",
   "displayName": "Azure Edge Security DC",
-  "description": "",
+  "description": "Rich authoring for Azure Device OS Configuration Desired Configuration (DC) documents.",
   "version": "1.0.0",
   "publisher": "edge-security",
   "engines": {
     "vscode": "^1.74.0"
   },
   "keywords": [
-    "multi-root ready"
+    "multi-root ready",
+    "azure",
+    "edge security",
+    "osconfig",
+    "desried configuration"
   ],
-  "categories": [],
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Linters"
+  ],
   "activationEvents": [
     "workspaceContains:**/osconfig_desired*.json",
     "onLanguage:json"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Azure/vscode-osconfig"
+    "url": "https://github.com/Azure/vscode-edge-security"
   },
   "main": "./client/out/extension.js",
   "contributes": {
