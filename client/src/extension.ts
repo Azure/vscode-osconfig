@@ -12,7 +12,7 @@ let client: LanguageClient;
 
 export function activate(context: vscode.ExtensionContext) {
   const serverModule = context.asAbsolutePath(
-    path.join('server', 'out', 'server.js')
+    path.join('dist', 'server', 'src', 'server.js')
   );
 
   const serverOptions: ServerOptions = {
@@ -38,8 +38,8 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   client = new LanguageClient(
-    'osconfigLanguageServer',
-    'OSConfig Language Server',
+    'desiredConfigurationLanguageServer',
+    'DC Language Server',
     serverOptions,
     clientOptions
   );
