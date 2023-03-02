@@ -27,7 +27,7 @@
     "type": "git",
     "url": "https://github.com/Azure/vscode-edge-security"
   },
-  "main": "./client/out/extension.js",
+  "main": "./dist/client/src/extension.js",
   "contributes": {
     "configuration": {
       "type": "object",
@@ -82,9 +82,9 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -b",
-    "watch": "tsc -b -watch",
+    "vscode:prepublish": "sh ./scripts/build.sh --minify",
+    "compile": "sh ./scripts/build.sh --sourcemap",
+    "watch": "sh ./scripts/build.sh --sourcemap --watch",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint ./client/src ./server/src --ext .ts",
     "test": "sh ./scripts/e2e.sh",
@@ -100,6 +100,7 @@
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "@vscode/vsce": "^2.18.0",
+    "esbuild": "^0.17.10",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
     "mocha": "^10.1.0",
