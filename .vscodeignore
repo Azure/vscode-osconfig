@@ -13,3 +13,4 @@ CONTRIBUTING.md
 scripts/**
 images/**
 **/node_modules
+**/out
