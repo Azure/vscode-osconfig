@@ -9,19 +9,13 @@ import * as path from 'path';
 
 export function run(): Promise<void> {
   const testsRoot = __dirname;
-  const mochaFile = path.resolve(testsRoot, '../../../test-results.xml');
-
   const mocha = new Mocha({
     ui: 'tdd',
     color: true,
     reporter: 'mocha-junit-reporter',
-    reporterOptions: {
-      mochaFile
-    }
   });
 
   mocha.timeout(1000000);
-
 
   return new Promise((resolve, reject) => {
     glob('**.test.js', { cwd: testsRoot }, (err, files) => {

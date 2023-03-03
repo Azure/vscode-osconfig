@@ -7,7 +7,13 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    env:
+      MOCHA_FILE: ${{ github.workspace }}/${{ matrix.os }}.xml
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -15,14 +21,18 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: 18.x
+        node-version: ${{ matrix.node-version }}
 
     - run: npm install
 
     - run: xvfb-run -a npm test
+      if: runner.os == 'Linux'
+
+    - run: npm test
+      if: runner.os != 'Linux'
 
     - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: integration-test
-        path: test-results.xml
+        path: ${{ matrix.os }}.xml

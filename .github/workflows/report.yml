@@ -13,6 +13,6 @@ jobs:
     - uses: dorny/test-reporter@v1
       with:
         artifact: integration-test
-        name: Test report
+        name: test report
         path: '*.xml'
         reporter: java-junit
