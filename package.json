@@ -83,10 +83,10 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile-base -- --minify",
-    "compile-base": "esbuild './client/src/extension.ts' './server/src/server.ts' --bundle --outdir=dist --external:vscode --format=cjs --platform=node --main-fields=module,main",
+    "compile-base": "esbuild ./client/src/extension.ts ./server/src/server.ts --bundle --outdir=dist --external:vscode --format=cjs --platform=node --main-fields=module,main",
     "compile": "npm run compile-base -- --sourcemap",
     "watch": "npm run compile-base -- --sourcemap --watch",
-    "pretest": "tsc -b && npm run lint",
+    "pretest": "npm run compile && tsc -b && npm run lint",
     "lint": "eslint ./client/src ./server/src --ext .ts",
     "test": "sh ./scripts/e2e.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
