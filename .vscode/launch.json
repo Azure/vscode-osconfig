@@ -27,7 +27,7 @@
 			"type": "node"
 		},
 		{
-			"name": "Extension Tests",
+			"name": "Test Extension",
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
@@ -38,7 +38,7 @@
 			"outFiles": [
 				"${workspaceFolder}/client/out/test/**/*.js"
 			],
-			"preLaunchTask": "${defaultBuildTask}"
+			"preLaunchTask": "npm: pretest"
 		}
 	]
 }
