@@ -16,7 +16,7 @@ export async function activate() {
   const ext = vscode.extensions.getExtension('edge-security.osconfig');
   await ext.activate();
 
-  // Wait for server activation
+  // Wait for language server activation
   await sleep(2000);
 }
 
@@ -25,7 +25,7 @@ export async function open(docUri: vscode.Uri) {
     doc = await vscode.workspace.openTextDocument(docUri);
     editor = await vscode.window.showTextDocument(doc);
 
-    // Wait for server activation
+    // Wait for language server to load the document
     await sleep(500);
   } catch (e) {
     console.error(e);
