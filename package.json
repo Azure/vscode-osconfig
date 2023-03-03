@@ -91,7 +91,7 @@
     "test": "sh ./scripts/e2e.sh",
     "postinstall": "sh ./scripts/postinstall.sh",
     "package": "vsce package",
-    "deploy": "vsce publish --yarn"
+    "deploy": "vsce publish"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
