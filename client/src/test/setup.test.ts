@@ -4,6 +4,7 @@
  * ------------------------------------------------------------------------------------------ */
 
 import * as vscode from 'vscode';
+import * as assert from 'assert';
 import { activate, getPath } from './helper';
 
 setup(async () => {
@@ -14,4 +15,10 @@ setup(async () => {
   const settings = await vscode.workspace.getConfiguration('osconfig');
   await settings.update('model.local.path', modelPath);
   await settings.update('model.priority', 'local');
+});
+
+test('Extension should load', async () => {
+  const extension = vscode.extensions.getExtension('edge-security.osconfig');
+  assert.ok(extension);
+  assert.ok(extension.isActive);
 });
