@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/Azure/vscode-edge-security"
+        "url": "https://github.com/Azure/vscode-osconfig"
     },
     "engines": {
         "vscode": "^1.74.0"
