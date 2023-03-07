@@ -1,6 +1,6 @@
 {
   "name": "osconfig",
-  "displayName": "Azure Edge Security DC",
+  "displayName": "Azure OSConfig",
   "description": "Rich authoring for Azure Device OS Configuration Desired Configuration (DC) documents.",
   "version": "1.0.0",
   "publisher": "edge-security",
