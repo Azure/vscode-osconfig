@@ -35,7 +35,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git release create ${{ github.ref_name }} \
+        gh release create ${{ github.ref_name }} \
           --repo ${{ github.repository }} \
           --title "Release ${{ github.ref_name }}" \
           --target ${{ github.sha }} \
