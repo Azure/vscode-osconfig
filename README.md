@@ -1,4 +1,4 @@
-# Azure Edge Security
+# Azure OSConfig
 
 This extension provides a rich authoring experience for [Azure Device OS Configuration](https://github.com/Azure/azure-osconfig) Desired Configuration (DC) documents.
 
@@ -30,8 +30,8 @@ This extension contributes the following settings:
 
 Have questions or feedback? There are many ways in which you can participate in this project, for example:
 
-- [Submit bugs and/or feature requests](https://github.com/Azure/vscode-edge-security/issues)
-- Review [source code changes](https://github.com/Azure/vscode-edge-security/pulls)
+- [Submit bugs and/or feature requests](https://github.com/Azure/vscode-osconfig/issues)
+- Review [source code changes](https://github.com/Azure/vscode-osconfig/pulls)
 - [Contribute directly](CONTRIBUTING.md) to the source code
 
 If you are interested in fixing issues and/or contributing, please see our [Contribution Guidelines](CONTRIBUTING.md).
@@ -46,4 +46,4 @@ This project has adopted the [Microsoft Open Source Code of Conduct](https://ope
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
-Licensed under the [MIT](https://github.com/Azure/vscode-edge-security/blob/main/LICENSE.txt) license.
+Licensed under the [MIT](https://github.com/Azure/vscode-osconfig/blob/main/LICENSE.txt) license.
