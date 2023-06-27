@@ -22,11 +22,9 @@ jobs:
 
     - run: npm install
 
-    - run: xvfb-run -a npm test
-      if: runner.os == 'Linux'
-
-    - run: npm test
-      if: runner.os != 'Linux'
+    - uses: coactions/setup-xvfb@v1
+      with:
+        run: npm test
 
     - uses: actions/upload-artifact@v3
       if: always()
