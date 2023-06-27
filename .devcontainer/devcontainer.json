@@ -4,13 +4,16 @@
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
-	"postCreateCommand": "npm install",
-	"extensions": [
-		"dbaeumer.vscode-eslint",
-        "eamodio.gitlens",
-		"esbenp.prettier-vscode",
-        "github.copilot",
-        "github.vscode-pull-request-github",
-        "mhutchie.git-graph"
-	]
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"eamodio.gitlens",
+				"esbenp.prettier-vscode",
+				"github.copilot",
+				"github.vscode-pull-request-github",
+				"mhutchie.git-graph"
+			]
+		}
+	}
 }
