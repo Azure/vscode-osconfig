@@ -2,15 +2,18 @@
 	"name": "vscode-osconfig",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
 	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"node": {
+			"version": "16"
+		}
 	},
+	"postCreateCommand": "npm install",
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"dbaeumer.vscode-eslint",
 				"eamodio.gitlens",
 				"esbenp.prettier-vscode",
-				"github.copilot",
 				"github.vscode-pull-request-github",
 				"mhutchie.git-graph"
 			]
