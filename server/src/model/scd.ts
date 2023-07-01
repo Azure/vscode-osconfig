@@ -15,56 +15,58 @@ import {
 interface Scd {
   scenarioConfigDefinition: ScdDefinition;
 }
+
 interface ScdDefinition {
   name: string;
-  documents: Array<ScdConfiguration>;
+  documents: Array<Document>;
 }
 
-interface ScdConfiguration {
-  configurations: Array<ConfigurationDefinition>;
+interface Document {
+  configurations: Array<Configuration>;
 }
 
-interface ConfigurationDefinition {
+interface Configuration {
   name: string;
   version: string;
   schemaversion: string;
   context: string;
-  settings: Array<ScdSetting>;
+  settings: Array<Setting>;
 }
 
-interface ScdSetting {
+interface Setting {
   name: string;
   defaultvalue: string,
   datatype: string;
 }
 
-const ScdSetting: D.Decoder<unknown, ScdSetting> = D.struct({
+const Setting: D.Decoder<unknown, Setting> = D.struct({
   name: D.string,
   defaultvalue: D.string,
   datatype: D.string,
 });
 
-const ConfigurationComponent: D.Decoder<unknown, ConfigurationDefinition> = D.struct({
+const Configuration: D.Decoder<unknown, Configuration> = D.struct({
   name: D.string,
   version: D.string,
   schemaversion: D.string,
   context: D.string,
-  settings: D.array(ScdSetting),
+  settings: D.array(Setting),
 });
 
-const ScdConfiguration: D.Decoder<unknown, ScdConfiguration> = D.struct({
-  configurations: D.array(ConfigurationComponent),
+const Document: D.Decoder<unknown, Document> = D.struct({
+  configurations: D.array(Configuration),
 });
 
-const ScdComponents: D.Decoder<unknown, ScdDefinition> = D.struct({
+const ScdDefinition: D.Decoder<unknown, ScdDefinition> = D.struct({
   name: D.string,
-  documents: D.array(ScdConfiguration),
+  documents: D.array(Document),
 });
 
 const Scd: D.Decoder<unknown, Scd> = D.struct({
-  scenarioConfigDefinition: ScdComponents,
+  scenarioConfigDefinition: ScdDefinition,
 });
 
+//This function allows the EnumSchema interface to be leveraged to store the default value of a key. In the future, it may be beneficial to create a string schema type that can store a value. 
 function stringLiteral(value: string): EnumSchema {
   return {
     type: 'enum',
@@ -78,10 +80,11 @@ function stringLiteral(value: string): EnumSchema {
   };
 }
 
-function settingsToSchema(scd: Scd): Schema {
+function settingsToSchema(settings: Setting[]): Schema {
   return {
     type: 'object',
-    fields: scd.scenarioConfigDefinition.documents[0].configurations[0].settings.map((component) => {
+    fields: settings.map((component) => 
+    {
       return {
         name: component.name,
         schema: stringLiteral(component.defaultvalue),
@@ -91,7 +94,7 @@ function settingsToSchema(scd: Scd): Schema {
 
 }
 
-function scenarioToSchema(scd: Scd): ArraySchema {
+function scenarioConfigurationToSchema(scenarioConfiguration: Configuration): ArraySchema {
   return {
     type: 'array',
     elementSchema:
@@ -100,19 +103,19 @@ function scenarioToSchema(scd: Scd): ArraySchema {
       fields: [
         {
           name: 'name',
-          schema: stringLiteral(scd.scenarioConfigDefinition.documents[0].configurations[0].name),
+          schema: stringLiteral(scenarioConfiguration.name),
         },
         {
           name: 'schemaversion',
-          schema: stringLiteral(scd.scenarioConfigDefinition.documents[0].configurations[0].schemaversion),
+          schema: stringLiteral(scenarioConfiguration.schemaversion),
         },
         {
           name: 'action',
           schema: 'string',
         },
         {
-          name: scd.scenarioConfigDefinition.documents[0].configurations[0].name,
-          schema: settingsToSchema(scd),
+          name: scenarioConfiguration.name,
+          schema: settingsToSchema(scenarioConfiguration.settings),
         }
       ]
     }
@@ -120,13 +123,13 @@ function scenarioToSchema(scd: Scd): ArraySchema {
 }
 
 
-function documentToSchema(configuration: Scd): Schema {
+function docConfigurationToSchema(configuration: Configuration): Schema {
   return {
     type: 'object',
     fields: [
       {
         name: 'schemaversion',
-        schema: stringLiteral(configuration.scenarioConfigDefinition.documents[0].configurations[0].schemaversion),
+        schema: stringLiteral(configuration.schemaversion),
       },
       {
         name: 'id',
@@ -134,47 +137,46 @@ function documentToSchema(configuration: Scd): Schema {
       },
       {
         name: 'version',
-        schema: stringLiteral(configuration.scenarioConfigDefinition.documents[0].configurations[0].version),
+        schema: stringLiteral(configuration.version),
       },
       {
         name: 'context',
-        schema: stringLiteral(configuration.scenarioConfigDefinition.documents[0].configurations[0].context),
+        schema: stringLiteral(configuration.context),
       },
       {
         name: 'scenario',
-        schema: stringLiteral(configuration.scenarioConfigDefinition.documents[0].configurations[0].name),
+        schema: stringLiteral(configuration.name),
       },
     ]
   };
 }
 
-function osConfigToSchema(scd: Scd): Schema {
+function osConfigToSchema(osConfig: Configuration): Schema {
   return {
     type: 'object',
     fields: [
       {
         name: 'Document',
-        schema: documentToSchema(scd),
+        schema: docConfigurationToSchema(osConfig),
       },
       {
         name: 'Scenario',
-        schema: scenarioToSchema(scd),
+        schema: scenarioConfigurationToSchema(osConfig),
       }
     ]
   };
 }
 
 
-function dcToSchema(model: Scd): Schema {
+function scdToSchema(scd: Scd): Schema {
   return {
     type: 'object',
     fields: [{
       name: 'OsConfiguration',
-      schema: osConfigToSchema(model),
+      schema: osConfigToSchema(scd.scenarioConfigDefinition.documents[0].configurations[0]),
     }
     ]
   };
-
 }
 
 export function parseModel(content: string): Schema | undefined {
@@ -182,7 +184,7 @@ export function parseModel(content: string): Schema | undefined {
     Scd.decode(JSON.parse(content)),
     fold(
       (errors) => { throw new Error(D.draw(errors)); },
-      (model) => dcToSchema(model)
+      (model) => scdToSchema(model)
     ),
   );
 }
