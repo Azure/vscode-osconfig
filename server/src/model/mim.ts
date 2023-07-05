@@ -73,7 +73,8 @@ function componentToSchema(component: MimComponent): Schema {
   const desired = component.contents.filter((object) => object.desired);
   return {
     type: 'object',
-    fields: desired.map((object) => {
+    fields: desired.map((object) => 
+    {
       return {
         name: object.name,
         schema: object.schema,
@@ -85,7 +86,8 @@ function componentToSchema(component: MimComponent): Schema {
 function modelToSchema(model: Mim): Schema {
   return {
     type: 'object',
-    fields: model.contents.map((component) => {
+    fields: model.contents.map((component) => 
+    {
       return {
         name: component.name,
         schema: componentToSchema(component),
