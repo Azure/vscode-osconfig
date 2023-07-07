@@ -4,5 +4,5 @@
  * ------------------------------------------------------------------------------------------ */
 
 export * from './repository';
-export * from './schema';
+export * from './mim';
 export * from './validator';
