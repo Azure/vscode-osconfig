@@ -9,6 +9,7 @@
 			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
+			"envFile": "${workspaceFolder}/.env",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
