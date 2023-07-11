@@ -79,7 +79,13 @@
           "description": "Traces the communication between VS Code and the language server."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "vscode-osconfig.DCGenerator",
+        "title": "Generate DC Document"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile-base -- --minify",
@@ -107,5 +113,8 @@
     "mocha": "^10.1.0",
     "mocha-junit-reporter": "^2.2.0",
     "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "@azure/openai": "^1.0.0-beta.2"
   }
 }
