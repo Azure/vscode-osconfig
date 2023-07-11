@@ -9,11 +9,7 @@ import {
   TransportKind,
 } from 'vscode-languageclient/node';
 
-import { 
-  padUserInput, 
-  systemMessage, 
-  parameters
-} from './openai';
+import { padUserInput, systemMessage, parameters } from './openai';
 
 let client: LanguageClient;
 
@@ -34,11 +30,13 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const clientOptions: LanguageClientOptions = {
-    documentSelector: [{
-      scheme: 'file',
-      language: 'json',
-      pattern: '**/osconfig_desired*.json'
-    }],
+    documentSelector: [
+      {
+        scheme: 'file',
+        language: 'json',
+        pattern: '**/osconfig_desired*.json',
+      },
+    ],
     synchronize: {
       fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc'),
     },
@@ -51,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
     clientOptions
   );
 
-  client.start(); 
+  client.start();
 
   const endpoint = process.env['AZURE_OPENAI_ENDPOINT2'];
   const azureApiKey = process.env['AZURE_OPENAI_KEY2'];
@@ -60,29 +58,41 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand('vscode-osconfig.DCGenerator', async () => {
     const userInput = await vscode.window.showInputBox({
       placeHolder: 'Enter setting here',
-      prompt: 'Enter in desired configuration setting for DC document (Ex: Network Access)'
+      prompt:
+        'Enter in desired configuration setting for DC document (Ex: Network Access)',
     });
 
     if (userInput === undefined) {
       vscode.window.showErrorMessage('Not a valid input');
     } else if (userInput === '') {
-      vscode.window.showErrorMessage('Setting configuration is required to execute this action');
+      vscode.window.showErrorMessage(
+        'Setting configuration is required to execute this action'
+      );
     } else {
-      vscode.window.showInformationMessage('Generating DC Doc with: ' + userInput);
-      const userMessage = padUserInput(userInput); 
+      vscode.window.showInformationMessage(
+        'Generating DC Doc with: ' + userInput
+      );
+      const userMessage = padUserInput(userInput);
       const messages = [
-        { role: 'system', content: systemMessage},
-        { role: 'user', content: userMessage}
+        { role: 'system', content: systemMessage },
+        { role: 'user', content: userMessage },
       ];
-      
-      if ((azureApiKey && endpoint)) {
-        const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
+
+      if (azureApiKey && endpoint) {
+        const client = new OpenAIClient(
+          endpoint,
+          new AzureKeyCredential(azureApiKey)
+        );
         //result variable will be used in future implementation
-        const result = await client.getChatCompletions(deploymentId, messages, parameters);
+        const result = await client.getChatCompletions(
+          deploymentId,
+          messages,
+          parameters
+        );
       }
     }
   });
-} 
+}
 
 export function deactivate(): Thenable<void> | undefined {
   return client ? client.stop() : undefined;
