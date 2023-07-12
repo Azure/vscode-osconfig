@@ -83,12 +83,19 @@ export function activate(context: vscode.ExtensionContext) {
           endpoint,
           new AzureKeyCredential(azureApiKey)
         );
-        //result variable will be used in future implementation
         const result = await client.getChatCompletions(
           deploymentId,
           messages,
           parameters
         );
+        
+        const editor = vscode.window.activeTextEditor;
+        editor.edit((editBuilder) => {
+          editBuilder.insert(
+            editor.selection.active,
+            result.choices[0].message.content
+          );
+        });
       }
     }
   });
