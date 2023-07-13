@@ -88,7 +88,6 @@ export function activate(context: vscode.ExtensionContext) {
           messages,
           parameters
         );
-        
         const editor = vscode.window.activeTextEditor;
         editor.edit((editBuilder) => {
           editBuilder.insert(
