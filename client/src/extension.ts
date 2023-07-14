@@ -88,13 +88,24 @@ export function activate(context: vscode.ExtensionContext) {
           messages,
           parameters
         );
-        const editor = vscode.window.activeTextEditor;
-        editor.edit((editBuilder) => {
-          editBuilder.insert(
-            editor.selection.active,
-            result.choices[0].message.content
-          );
-        });
+
+        if (
+          result.choices.length > 0 &&
+          result.choices[0].finishReason !== null
+        ) {
+          if (vscode.window.activeTextEditor) {
+            vscode.window.activeTextEditor.edit((editBuilder) => {
+              editBuilder.insert(
+                vscode.window.activeTextEditor.selection.active,
+                result.choices[0].message.content
+              );
+            });
+          } else {
+            vscode.window.showErrorMessage(
+              'vscode-osconfig: Must have file or workspace opened to generate DC Document.'
+            );
+          }
+        }
       }
     }
   });
