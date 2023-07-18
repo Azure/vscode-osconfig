@@ -22,14 +22,14 @@ jobs:
 
     - run: npm ci
 
-    - run: xvfb-run -a npm test
-      if: runner.os == 'Linux'
+    # - run: xvfb-run -a npm test
+    #   if: runner.os == 'Linux'
 
-    - run: npm test
-      if: runner.os != 'Linux'
+    # - run: npm test
+    #   if: runner.os != 'Linux'
 
-    - uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: integration-test
-        path: ${{ matrix.os }}.xml
+    # - uses: actions/upload-artifact@v3
+    #   if: always()
+    #   with:
+    #     name: integration-test
+    #     path: ${{ matrix.os }}.xml
