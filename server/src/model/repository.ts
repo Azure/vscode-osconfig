@@ -15,7 +15,7 @@ import {
   Schema,
   isObject
 } from '../common';
-import { parseModel } from './mim';
+import { parseModel } from './scd';
 
 // GitHub repository content response schema
 // https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
