@@ -76,7 +76,7 @@ const Scd: D.Decoder<unknown, Scd> = D.struct({
   scenarioConfigDefinition: ScdDefinition,
 });
 
-function stringLiteral(value: string): StringLiteralSchema {
+function stringLiteralToSchema(value: string): StringLiteralSchema {
   return {
     type: 'stringLiteral',
     valueSchema: 'string',
@@ -84,7 +84,7 @@ function stringLiteral(value: string): StringLiteralSchema {
   };
 }
 
-function stringLiteraltoEnum(values: Array<string>): EnumSchema {
+function stringLiteralToEnumSchema(values: Array<string>): EnumSchema {
   return {
     type: 'enum',
     valueSchema: 'string',
@@ -96,26 +96,8 @@ function stringLiteraltoEnum(values: Array<string>): EnumSchema {
     })
   };
 }
-/*
-function stringLiteral3(lowvalue: string, highvalue: string): EnumSchema {
-  return {
-    type: 'enum',
-    valueSchema: 'string',
-    enumValues: [
-      {
-        name: '',
-        enumValue: lowvalue,
-      },
-      {
-        name: '',
-        enumValue: highvalue,
-      },
-    ],
-  };
-}
-*/
 
-function settingtoRange(lowvalue: string, highvalue: string): RangeSchema {
+function settingtoRangeSchema(lowvalue: string, highvalue: string): RangeSchema {
   return {
     type: 'range',
     valueSchema: 'string',
@@ -133,19 +115,19 @@ function settingsToSchema(settings: Setting[]): Schema {
       if (component.lowrange && component.highrange) {
         return {
           name: component.name,
-          schema: settingtoRange(component.lowrange, component.highrange),
+          schema: settingtoRangeSchema(component.lowrange, component.highrange),
         };
       } else if (component.allowedvalues) {
         const allowedValues = component.allowedvalues.split(','); 
         return {
           name: component.name, 
-          schema: stringLiteraltoEnum(allowedValues), 
+          schema: stringLiteralToEnumSchema(allowedValues), 
         };
       }
       else {
         return {
           name: component.name,
-          schema: stringLiteral(component.defaultvalue),
+          schema: stringLiteralToSchema(component.defaultvalue),
         };
       }
     }),
@@ -162,11 +144,11 @@ function scenarioConfigurationToSchema(
       fields: [
         {
           name: 'name',
-          schema: stringLiteral(scenarioConfiguration.name),
+          schema: stringLiteralToSchema(scenarioConfiguration.name),
         },
         {
           name: 'schemaversion',
-          schema: stringLiteral(scenarioConfiguration.schemaversion),
+          schema: stringLiteralToSchema(scenarioConfiguration.schemaversion),
         },
         {
           name: 'action',
@@ -187,7 +169,7 @@ function docConfigurationToSchema(configuration: Configuration): Schema {
     fields: [
       {
         name: 'schemaversion',
-        schema: stringLiteral(configuration.schemaversion),
+        schema: stringLiteralToSchema(configuration.schemaversion),
       },
       {
         name: 'id',
@@ -195,15 +177,15 @@ function docConfigurationToSchema(configuration: Configuration): Schema {
       },
       {
         name: 'version',
-        schema: stringLiteral(configuration.version),
+        schema: stringLiteralToSchema(configuration.version),
       },
       {
         name: 'context',
-        schema: stringLiteral(configuration.context),
+        schema: stringLiteralToSchema(configuration.context),
       },
       {
         name: 'scenario',
-        schema: stringLiteral(configuration.name),
+        schema: stringLiteralToSchema(configuration.name),
       },
     ],
   };

@@ -51,7 +51,7 @@ export interface RangeSchema {
   rangeValues: {
   lowvalue: number; 
   highvalue: number; 
- }
+ };
 }
 
 export interface StringLiteralSchema {
