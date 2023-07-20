@@ -7,8 +7,6 @@ import { fold } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/function';
 
 import { ArraySchema, EnumSchema, RangeSchema, Schema, StringLiteralSchema } from '../common/schema';
-import { parse } from 'path';
-import { elem } from 'fp-ts/lib/Option';
 
 interface Scd {
   scenarioConfigDefinition: ScdDefinition;
