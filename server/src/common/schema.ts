@@ -49,8 +49,8 @@ export interface RangeSchema {
   type: 'range'; 
   valueSchema: 'string'; 
   rangeValues: {
-  lowvalue: number; 
-  highvalue: number; 
+    lowvalue: number; 
+    highvalue: number; 
  };
 }
 
@@ -123,7 +123,6 @@ export const MapSchema: D.Decoder<unknown, MapSchema> = D.struct({
 
 export const RangeSchema: D.Decoder<unknown, RangeSchema> = D.struct({
   type: D.literal('range'),
-  //name: D.string, 
   valueSchema: StringSchema, 
   rangeValues: D.struct({
     lowvalue: D.number, 
@@ -257,8 +256,6 @@ export abstract class Visitor<Context> {
   public abstract onArray(node: Node, context?: Context): void;
   public abstract onObject(node: Node, context?: Context): void;
   public abstract onProperty(node: Node, context?: Context): void;
-  //public abstract onRange(node: Node, context?: Context): void;
-
 }
 
 export function findSchemaAtLocation(schema: Schema, path: JSONPath): Schema | undefined {
