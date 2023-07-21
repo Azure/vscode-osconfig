@@ -8,7 +8,7 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 
 import { Node, parseTree } from 'jsonc-parser';
 
-import { Schema, Visitor, getEnumValues, getType, isArray, isEnum, isMap, isObject } from '../common';
+import { Schema, Visitor, getEnumValues, getType, isArray, isEnum, isMap, isObject, isRange, isStringLiteral } from '../common';
 
 export class Validator extends Visitor<Schema> {
   private diagnostics: Diagnostic[] = [];
@@ -61,6 +61,28 @@ export class Validator extends Visitor<Schema> {
         }
       } else {
         this.diagnostic(`Invalid type '${node.type}', expected 'enum<${getType(schema.valueSchema)}>'.`, node);
+      }
+    } else if (isRange(schema))
+    {
+      if(node.type === schema.valueSchema)
+      {
+        if(!(schema.rangeValues.lowvalue <= node.value && schema.rangeValues.highvalue >=  node.value))
+        {
+          this.diagnostic(`Invalid value '${node.value}', expected value between ${schema.rangeValues.lowvalue} and ${schema.rangeValues.highvalue}.`, node);
+        }
+      }
+      else {
+        this.diagnostic(`Invalid type '${node.type}', expected 'type<${getType(schema.valueSchema)}>'.`, node);
+      }
+    } else if(isStringLiteral(schema)) {
+      if(node.type === schema.valueSchema)
+      {
+        if(node.value !== schema.value) {
+          this.diagnostic(`Invalid value '${node.value}'.`, node);
+          this.diagnostic(`Must be "${schema.value}"`, node); 
+        }
+      } else {
+        this.diagnostic(`Invalid type '${node.type}', expected 'type<${getType(schema.valueSchema)}>'.`, node);
       }
     } else if (node.type !== schema) {
       this.diagnostic(`Invalid type '${node.type}', expected '${getType(schema)}'.`, node);

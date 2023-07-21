@@ -13,7 +13,9 @@ export type Schema =
   | ArraySchema
   | EnumSchema
   | MapSchema
-  | ObjectSchema;
+  | ObjectSchema 
+  | RangeSchema
+  | StringLiteralSchema;
 
 export type Primitive = 'string' | 'number' | 'boolean';
 
@@ -41,6 +43,21 @@ export interface MapSchema {
     name: string;
     schema: 'string' | 'number';
   };
+}
+
+export interface RangeSchema {
+  type: 'range'; 
+  valueSchema: 'string'; 
+  rangeValues: {
+    lowvalue: number; 
+    highvalue: number; 
+ };
+}
+
+export interface StringLiteralSchema {
+  type: 'stringLiteral';
+  valueSchema: 'string'
+  value: string; 
 }
 
 export type ObjectSchema = GenericObject<Schema>;
@@ -104,6 +121,21 @@ export const MapSchema: D.Decoder<unknown, MapSchema> = D.struct({
   }),
 });
 
+export const RangeSchema: D.Decoder<unknown, RangeSchema> = D.struct({
+  type: D.literal('range'),
+  valueSchema: StringSchema, 
+  rangeValues: D.struct({
+    lowvalue: D.number, 
+    highvalue: D.number, 
+  }),
+});
+
+export const StringLiteralSchema: D.Decoder<unknown, StringLiteralSchema> = D.struct({
+  type: D.literal('stringLiteral'),
+  valueSchema: StringSchema,
+  value: D.string, 
+});
+
 export const Schema: D.Decoder<unknown, Schema> = D.union(
   StringSchema,
   IntegerSchema,
@@ -112,6 +144,8 @@ export const Schema: D.Decoder<unknown, Schema> = D.union(
   EnumSchema,
   MapSchema,
   ObjectSchema,
+  RangeSchema,
+  StringLiteralSchema
 );
 
 export function isString(schema: Schema | undefined): schema is 'string' {
@@ -145,6 +179,12 @@ export function isObject(schema: Schema | undefined): schema is ObjectSchema {
 export function isPrimitive(schema: Schema | undefined): schema is Primitive {
   return (schema !== undefined) && isString(schema) || isNumber(schema) || isBoolean(schema);
 }
+export function isRange(schema: Schema | undefined): schema is RangeSchema {
+  return (schema !== undefined) && ((schema as RangeSchema).type === 'range');
+}
+export function isStringLiteral(schema: Schema | undefined): schema is StringLiteralSchema {
+  return (schema !== undefined) && ((schema as StringLiteralSchema).type === 'stringLiteral');
+}
 
 export function getType(schema: Schema): string {
   if (isPrimitive(schema)) {
@@ -166,7 +206,9 @@ export function getType(schema: Schema): string {
   if (isObject(schema)) {
     return 'object';
   }
-
+  if (isRange(schema) || isStringLiteral(schema)) {
+    return 'string';
+  }
   return 'unknown';
 }
 

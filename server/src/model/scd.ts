@@ -6,11 +6,7 @@ import * as D from 'io-ts/Decoder';
 import { fold } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/lib/function';
 
-import {
-  ArraySchema,
-  EnumSchema,
-  Schema
-} from '../common/schema';
+import { ArraySchema, EnumSchema, RangeSchema, Schema, StringLiteralSchema } from '../common/schema';
 
 interface Scd {
   scenarioConfigDefinition: ScdDefinition;
@@ -35,15 +31,27 @@ interface Configuration {
 
 interface Setting {
   name: string;
-  defaultvalue: string,
+  defaultvalue: string;
   datatype: string;
+  lowrange?: string;
+  highrange?: string;
+  allowedvalues?: string;
 }
 
-const Setting: D.Decoder<unknown, Setting> = D.struct({
-  name: D.string,
-  defaultvalue: D.string,
-  datatype: D.string,
-});
+const Setting: D.Decoder<unknown, Setting> = pipe(
+  D.struct({
+    name: D.string,
+    defaultvalue: D.string,
+    datatype: D.string,
+  }),
+  D.intersect(
+    D.partial({
+      lowrange: D.string,
+      highrange: D.string,
+      allowedvalues: D.string,
+    })
+  )
+);
 
 const Configuration: D.Decoder<unknown, Configuration> = D.struct({
   name: D.string,
@@ -66,48 +74,79 @@ const Scd: D.Decoder<unknown, Scd> = D.struct({
   scenarioConfigDefinition: ScdDefinition,
 });
 
-//This function allows the EnumSchema interface to be leveraged to store the default value of a key. In the future, it may be beneficial to create a string schema type that can store a value. 
-function stringLiteral(value: string): EnumSchema {
+function stringLiteralToSchema(value: string): StringLiteralSchema {
+  return {
+    type: 'stringLiteral',
+    valueSchema: 'string',
+    value: value,
+  };
+}
+
+function stringLiteralToEnumSchema(values: Array<string>): EnumSchema {
   return {
     type: 'enum',
     valueSchema: 'string',
-    enumValues: [
-      {
-        name: '',
+    enumValues: values.map((value) => {
+      return {
+        name: '', 
         enumValue: value,
-      }
-    ]
+      };
+    })
+  };
+}
+
+function settingtoRangeSchema(lowvalue: string, highvalue: string): RangeSchema {
+  return {
+    type: 'range',
+    valueSchema: 'string',
+    rangeValues: {
+      lowvalue: Number(lowvalue), 
+      highvalue: Number(highvalue) 
+    }
   };
 }
 
 function settingsToSchema(settings: Setting[]): Schema {
   return {
     type: 'object',
-    fields: settings.map((component) => 
-    {
-      return {
-        name: component.name,
-        schema: stringLiteral(component.defaultvalue),
-      };
-    })
+    fields: settings.map((component) => {
+      if (component.lowrange && component.highrange) {
+        return {
+          name: component.name,
+          schema: settingtoRangeSchema(component.lowrange, component.highrange),
+        };
+      } else if (component.allowedvalues) {
+        const allowedValues = component.allowedvalues.split(','); 
+        return {
+          name: component.name, 
+          schema: stringLiteralToEnumSchema(allowedValues), 
+        };
+      }
+      else {
+        return {
+          name: component.name,
+          schema: stringLiteralToSchema(component.defaultvalue),
+        };
+      }
+    }),
   };
-
 }
 
-function scenarioConfigurationToSchema(scenarioConfiguration: Configuration): ArraySchema {
+function scenarioConfigurationToSchema(
+  scenarioConfiguration: Configuration
+): ArraySchema {
   return {
     type: 'array',
-    elementSchema:
-    {
+    elementSchema: {
       type: 'object',
       fields: [
         {
           name: 'name',
-          schema: stringLiteral(scenarioConfiguration.name),
+          schema: stringLiteralToSchema(scenarioConfiguration.name),
         },
         {
           name: 'schemaversion',
-          schema: stringLiteral(scenarioConfiguration.schemaversion),
+          schema: stringLiteralToSchema(scenarioConfiguration.schemaversion),
         },
         {
           name: 'action',
@@ -116,12 +155,11 @@ function scenarioConfigurationToSchema(scenarioConfiguration: Configuration): Ar
         {
           name: scenarioConfiguration.name,
           schema: settingsToSchema(scenarioConfiguration.settings),
-        }
-      ]
-    }
+        },
+      ],
+    },
   };
 }
-
 
 function docConfigurationToSchema(configuration: Configuration): Schema {
   return {
@@ -129,7 +167,7 @@ function docConfigurationToSchema(configuration: Configuration): Schema {
     fields: [
       {
         name: 'schemaversion',
-        schema: stringLiteral(configuration.schemaversion),
+        schema: stringLiteralToSchema(configuration.schemaversion),
       },
       {
         name: 'id',
@@ -137,17 +175,17 @@ function docConfigurationToSchema(configuration: Configuration): Schema {
       },
       {
         name: 'version',
-        schema: stringLiteral(configuration.version),
+        schema: stringLiteralToSchema(configuration.version),
       },
       {
         name: 'context',
-        schema: stringLiteral(configuration.context),
+        schema: stringLiteralToSchema(configuration.context),
       },
       {
         name: 'scenario',
-        schema: stringLiteral(configuration.name),
+        schema: stringLiteralToSchema(configuration.name),
       },
-    ]
+    ],
   };
 }
 
@@ -162,20 +200,22 @@ function osConfigToSchema(osConfig: Configuration): Schema {
       {
         name: 'Scenario',
         schema: scenarioConfigurationToSchema(osConfig),
-      }
-    ]
+      },
+    ],
   };
 }
-
 
 function scdToSchema(scd: Scd): Schema {
   return {
     type: 'object',
-    fields: [{
-      name: 'OsConfiguration',
-      schema: osConfigToSchema(scd.scenarioConfigDefinition.documents[0].configurations[0]),
-    }
-    ]
+    fields: [
+      {
+        name: 'OsConfiguration',
+        schema: osConfigToSchema(
+          scd.scenarioConfigDefinition.documents[0].configurations[0]
+        ),
+      },
+    ],
   };
 }
 
@@ -183,9 +223,10 @@ export function parseModel(content: string): Schema | undefined {
   return pipe(
     Scd.decode(JSON.parse(content)),
     fold(
-      (errors) => { throw new Error(D.draw(errors)); },
+      (errors) => {
+        throw new Error(D.draw(errors));
+      },
       (model) => scdToSchema(model)
-    ),
+    )
   );
 }
-
