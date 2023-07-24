@@ -9,7 +9,7 @@ import {
   TransportKind,
 } from 'vscode-languageclient/node';
 
-import { padUserInput, systemMessage, parameters } from './openai';
+import { padUserInput, systemMessage, chatCompletionptions, messages2, getMessages } from './openai';
 
 let client: LanguageClient;
 
@@ -78,33 +78,46 @@ export function activate(context: vscode.ExtensionContext) {
         { role: 'user', content: userMessage },
       ];
 
+      const messagesObject = getMessages(userInput); 
+
       if (azureApiKey && endpoint) {
         const client = new OpenAIClient(
           endpoint,
           new AzureKeyCredential(azureApiKey)
         );
         const result = await client.getChatCompletions(
-          deploymentId,
-          messages,
-          parameters
+          deploymentId, messagesObject, chatCompletionptions
         );
-
+        console.log(userMessage); 
         if (
           result.choices.length > 0 &&
           result.choices[0].finishReason !== null
         ) {
-          if (vscode.window.activeTextEditor) {
-            vscode.window.activeTextEditor.edit((editBuilder) => {
-              editBuilder.insert(
-                vscode.window.activeTextEditor.selection.active,
-                result.choices[0].message.content
+          if(!result.choices[0].message.content.includes('#'))
+          {
+            if (vscode.window.activeTextEditor) {
+              vscode.window.activeTextEditor.edit((editBuilder) => {
+                editBuilder.insert(
+                  vscode.window.activeTextEditor.selection.active,
+                  result.choices[0].message.content
+                );
+              });
+            } else {
+              vscode.window.showErrorMessage(
+                'vscode-osconfig: Must have file or workspace opened to generate DC Document.'
               );
-            });
-          } else {
+            }
+          }
+          else {
             vscode.window.showErrorMessage(
-              'vscode-osconfig: Must have file or workspace opened to generate DC Document.'
+              'vscode-osconfig: Unable to generate DC document for ' + userInput
             );
           }
+        }
+        else {
+          vscode.window.showErrorMessage(
+            'vscode-osconfig: Error generating response.'
+          );
         }
       }
     }
