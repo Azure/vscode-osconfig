@@ -4,20 +4,20 @@
  * ------------------------------------------------------------------------------------------ */
 
 import { ChatMessage } from '@azure/openai';
-import { v4 as uuid} from 'uuid'; 
+import { v4 as uuid } from 'uuid';
 
-//import {stripIndent} from 'common-tags'; 
-export const systemMessage =
-  'I want you to act as an IT administrator and Software Engineer. You will need to generate a desired configuration JSON document based on the information present in the attached list. Do not make up settings. You will only include relevant settings. Output must include JSON file only, no chat response. '; 
+export const systemMessage1 =
+  'I want you to act as an IT administrator and Software Engineer. You will need to generate a desired configuration JSON document based on the information present in the attached list. Do not make up settings. You will only include relevant settings. Output must include JSON file only, no chat response. ';
 
-const scdList = `Configuration Scenario: ASHCIApplianceSecurityBaselineConfig; 
+const scdList = `
+Configuration Scenario: ASHCIApplianceSecurityBaselineConfig; 
 Schemaversion: 1.0; 
 ID: ${uuid()}; 
 version: 1.0; 
 context: device. 
 Action: set. 
 Settings: 
-1. Name: InteractiveLogon_DoNotRequireCTRLALTDEL description: Interactive logon: Do not require CTRL+ALT+DEL, default value: 0;    
+ 1. Name: InteractiveLogon_DoNotRequireCTRLALTDEL description: Interactive logon: Do not require CTRL+ALT+DEL, default value: 0;    
  2. Name: InteractiveLogon_DoNotDisplayLastSignedIn description: Interactive logon: Don't display last signed-in, default value: 1;    
  3. Name: InteractiveLogon_RequireDomainControllerAuthenticationToUnlock description: Interactive logon: Require Domain Controller authentication to unlock workstation, default value: 1;    
  4. Name: MicrosoftNetworkClient_DigitallySignCommunicationsAlways description: Microsoft network client: Digitally sign communications (always), default value: 1;    
@@ -49,52 +49,37 @@ category settings, default value: 1;
  28. Name: DomainMember_DigitallyEncryptSecureChannelDataWhenPossible description: Domain member: Digitally encrypt secure channel data (when possible), default value: 1;
  29. Name: DomainMember_DigitallySignSecureChannelDataWhenPossible description: Domain member: Digitally sign secure channel data (when possible), default value: 1;`;
 
-export function padUserInput(input: string): string {
-  const paddedInput = `You will need to generate a new desired configuration JSON document based on the information present in the included list.
-The desired configuration JSON will have an "OsConfiguration" object, with a "Document" Object and a "Scenario" array  
-inside of it. The "Document" object is composed of a "schemaversion", "id", "version", "context", and "scenario" variable.  
-The default values for these variables are included in the document. The "Scenario" array is composed of an object that has  
-a "name" variable, a "schemaversion" variable, a "action" variable, and an object that has the same name as the configuration scenario.  
-This object is composed of the relevant settings from the document I am giving you. Inside this object, you should only include  
-the setting name and default value of settings that relate to ${input} only. All values in the JSON should be in string format.  
-Construct a JSON based on this information and the provided configuration information. Remember, you will never include any chat text in your response, just JSON data only.  
-Also, you should only include settings that are related to ${input}. Do not include unrelated settings in the JSON. \n --- \n LIST \n`;
-  return paddedInput + scdList;
-}
+export const systemMessage =
+  'You are an AI assistant who is a Software Engineer and IT adminstrator. You will need to generate a new desired configuration JSON document based on the information present in the included list.' +
+  'The desired configuration JSON will have an "OsConfiguration" object, with a "Document" Object and a "Scenario" array inside of it. The "Document" object is composed of a "schemaversion", "id", "version", "context", and "scenario" variable. ' +
+  'The default values for these variables are included in the provided list. Make sure to use the uuid value for the "id" variable. The "Scenario" array is composed of an object that has ' +
+  'a "name" variable, a "schemaversion" variable, a "action" variable, and an object that has the same name as the configuration scenario. ' +
+  'This object is composed of the relevant settings from the list you are given. Inside this object, you should only include ' +
+  'the setting name and default value of settings that are relevant to what is being requested. All values in the JSON should be in string format. ' +
+  'Construct a JSON based on this information and the provided configuration information. Remember, you will never include any chat text in your response, just JSON data only. ' +
+  'Do not include unrelated settings in the JSON.';
 
 export function getMessages(input: string): Array<ChatMessage> {
-  const paddedInput = `Construct a JSON based on this information and the provided configuration information. You should only include settings that are related 
-  to ${input}. Do not include unrelated settings in the JSON. DO NOT MAKE UP YOUR OWN SETTING`;
+  const paddedInput = `Construct a JSON based with settings related to ${input} based on the provided configuration information. Settings should only come from the given Settings list, do not make up any settings, even if there is no related ones in the list `;
 
-
-  const messagesParam = [
+  const messages = [
     {
       role: 'system',
-      content: ` You are an AI assistant who is a Software Engineer and IT adminstrator. You will need to generate a new desired configuration JSON document based on the information present in the included list.
-      The desired configuration JSON will have an "OsConfiguration" object, with a "Document" Object and a "Scenario" array  
-      inside of it. The "Document" object is composed of a "schemaversion", "id", "version", "context", and "scenario" variable.  
-      The default values for these variables are included in the provided list. The "Scenario" array is composed of an object that has  
-      a "name" variable, a "schemaversion" variable, a "action" variable, and an object that has the same name as the configuration scenario.  
-      This object is composed of the relevant settings from the list you are given. Inside this object, you should only include  
-      the setting name and default value of settings that are relevant to what is being requested. All values in the JSON should be in string format.  
-      Construct a JSON based on this information and the provided configuration information. Remember, you will never include any chat text in your response, just JSON data only.  
-      Do not include unrelated settings in the JSON.`
+      content: systemMessage,
     },
     {
       role: 'user',
-      content: 'Here is the list of configuration and setting data. Only use this list for the JSON. DO NOT MAKE UP ANYTHING: \n ' + scdList, 
+      content:
+        'Here is the list of configuration and setting data. Only use this list for the JSON.' +
+        scdList,
     },
     {
       role: 'user',
-      content: 'Relevant settings are settings that include the requested scenario in the setting title or description', 
-    },  
-    {
-      role: 'user',
-      content: userMessage1
+      content: userMessage1,
     },
     {
       role: 'assistant',
-      content: assistantResponse1
+      content: assistantResponse1,
     },
     {
       role: 'user',
@@ -102,30 +87,30 @@ export function getMessages(input: string): Array<ChatMessage> {
     },
     {
       role: 'assistant',
-      content: assistantResponse2
+      content: assistantResponse2,
     },
     {
       role: 'user',
       content: userMessage3,
-    }, 
+    },
     {
       role: 'assistant',
       content: assistantResponse3,
-    }, 
+    },
     {
       role: 'user',
       content: userMessage4,
-    }, 
+    },
     {
       role: 'assistant',
       content: assistantResponse4,
-    }, 
+    },
     {
       role: 'user',
       content: paddedInput,
-    }
+    },
   ];
-  return messagesParam;
+  return messages;
 }
 
 export const chatCompletionptions = {
@@ -135,46 +120,24 @@ export const chatCompletionptions = {
   presence_penalty: 0,
   max_tokens: 4000,
   stop: null,
-  /*
-  dataSources: [
-    {
-      type: 'AzureCognitiveSearch',
-      parameters: {
-        endpoint: 'https://dssearchserv2023.search.windows.net/',
-        key: 'eeBMDmAi7wPW4zYu1lRNckP8xbclsLjqIOyrNBc1HEAzSeAIBSlk',
-        indexName: 'osconfig'
-      }
-    }
-  ]
-  */
 };
 
-
 const userMessage1 =
-  `Construct a JSON based on this information and the provided configuration information. You should only include settings that are related 
-  to Network Access. Do not include unrelated settings in the JSON.
-  `; 
+  'Construct a JSON based with settings related to Network Access based on the provided configuration information. Settings should only come from the given Settings list.';
 
 const userMessage2 =
-  `Construct a JSON based on this information and the provided configuration information. You should only include settings that are related 
-  to Logons. Do not include unrelated settings in the JSON.
-  `; 
+  'Construct a JSON based with settings related to Logons based on the provided configuration information. Settings should only come from the given Settings list.';
 
 const userMessage3 =
-  `Construct a JSON based on this information and the provided configuration information. You should only include settings that are related 
-  to Pizza. Do not include unrelated settings in the JSON.
-  `; 
+  'Construct a JSON based with settings related to pizza based on the provided configuration information. Settings should only come from the given Settings list';
 
 const userMessage4 =
-  `Construct a JSON based on this information and the provided configuration information. You should only include settings that are related 
-  to biometrics. Do not include unrelated settings in the JSON.
-  `;
+  'Construct a JSON based with settings related to Biometrics based on the provided configuration information. Settings should only come from the given Settings list';
 
-const assistantResponse4 = 
+const assistantResponse4 =
   '#Error: No settings are related to biometrics in the list.';
 
-const assistantResponse1 = 
-`
+const assistantResponse1 = `
 {
   "OsConfiguration": {
     "Document": {
@@ -199,10 +162,9 @@ const assistantResponse1 =
     ]
   }
 }
-`; 
+`;
 
-const assistantResponse2 = 
-`
+const assistantResponse2 = `
 {
   "OsConfiguration": {
     "Document": {
@@ -228,42 +190,6 @@ const assistantResponse2 =
     ]
   }
 }
-`; 
-const assistantResponse3 = 
-'#Error: Pizza is not a valid configuration scenario'; 
-
-
-export const messages2 = [
-  {
-    role: 'system',
-    content: systemMessage,
-  },
-  {
-    role: 'user',
-    content: userMessage1
-  },
-  {
-    role: 'assistant',
-    content: assistantResponse1
-  },
-  {
-    role: 'user',
-    content: userMessage2,
-  },
-  {
-    role: 'assistant',
-    content: assistantResponse2
-  },
-  {
-    role: 'user',
-    content: userMessage3,
-  }, 
-  {
-    role: 'assistant',
-    content: assistantResponse3,
-  }, 
-  {
-    role: 'user',
-    content: '',
-  }
-]; 
+`;
+const assistantResponse3 =
+  '#Error: Pizza is not a valid configuration scenario';
