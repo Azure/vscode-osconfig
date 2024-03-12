@@ -2,6 +2,7 @@
   "name": "osconfig",
   "displayName": "Azure OSConfig",
   "description": "Rich authoring for Azure Device OS Configuration Desired Configuration (DC) documents.",
+  "icon": "images/osconfig-128.png",
   "version": "1.0.0",
   "publisher": "edge-security",
   "engines": {
